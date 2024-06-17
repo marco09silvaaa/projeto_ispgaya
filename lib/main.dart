@@ -1,10 +1,12 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+//import 'dart:math';
+//import 'package:flutter/scheduler.dart';
 
+// Função principal para executar a app
 void main() => runApp(const TimeTableCalendar());
 
+// StatefulWidget para o calendário de horários
 class TimeTableCalendar extends StatefulWidget {
   const TimeTableCalendar({super.key});
 
@@ -12,8 +14,11 @@ class TimeTableCalendar extends StatefulWidget {
   CalendarAppointment createState() => CalendarAppointment();
 }
 
+// Classe que gere o estado do TimeTableCalendar
 class CalendarAppointment extends State<TimeTableCalendar> {
+  // Fonte de dados do calendário
   final CalendarDataSource _dataSource = _DataSource(<Appointment>[]);
+  // Listas para armazenar assuntos, horários de início e término e cores dos compromissos
   final List<String> _subjectCollection = <String>[];
   final List<DateTime> _startTimeCollection = <DateTime>[];
   final List<DateTime> _endTimeCollection = <DateTime>[];
@@ -22,6 +27,7 @@ class CalendarAppointment extends State<TimeTableCalendar> {
 
   @override
   void initState() {
+    // Inicializa as coleções de dados
     _getSubjectCollection();
     _getStartTimeCollection();
     _getEndTimeCollection();
@@ -36,68 +42,23 @@ class CalendarAppointment extends State<TimeTableCalendar> {
       home: Scaffold(
         body: SafeArea(
           child: SfCalendar(
-            dataSource: _dataSource,
-            view: CalendarView.week,
+            dataSource: _dataSource, // Fonte de dados do calendário
+            view: CalendarView.week, // Visualização padrão
             allowedViews: const [
               CalendarView.day,
               CalendarView.week,
               CalendarView.month,
               CalendarView.schedule
             ],
-            onViewChanged: viewChanged,
-            specialRegions: _specialTimeRegion,
+            specialRegions:
+                _specialTimeRegion, // Regiões de tempo especiais no calendário
           ),
         ),
       ),
     );
   }
 
-  void viewChanged(ViewChangedDetails viewChangedDetails) {
-    List<DateTime> visibleDates = viewChangedDetails.visibleDates;
-    List<TimeRegion> timeRegion = <TimeRegion>[];
-    List<Appointment> appointments = <Appointment>[];
-    _dataSource.appointments!.clear();
-
-    for (int i = 0; i < visibleDates.length; i++) {
-      if (visibleDates[i].weekday == 6 || visibleDates[i].weekday == 7) {
-        continue;
-      }
-
-      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        setState(() {
-          _specialTimeRegion = timeRegion;
-        });
-      });
-      for (int j = 0; j < _startTimeCollection.length; j++) {
-        DateTime startTime = DateTime(
-            visibleDates[i].year,
-            visibleDates[i].month,
-            visibleDates[i].day,
-            _startTimeCollection[j].hour,
-            _startTimeCollection[j].minute,
-            _startTimeCollection[j].second);
-        DateTime endTime = DateTime(
-            visibleDates[i].year,
-            visibleDates[i].month,
-            visibleDates[i].day,
-            _endTimeCollection[j].hour,
-            _endTimeCollection[j].minute,
-            _endTimeCollection[j].second);
-        Random random = Random();
-        appointments.add(Appointment(
-            startTime: startTime,
-            endTime: endTime,
-            subject: _subjectCollection[random.nextInt(3)],
-            color: _colorCollection[random.nextInt(3)]));
-      }
-    }
-    for (int i = 0; i < appointments.length; i++) {
-      _dataSource.appointments!.add(appointments[i]);
-    }
-    _dataSource.notifyListeners(
-        CalendarDataSourceAction.reset, _dataSource.appointments!);
-  }
-
+  // Inicializa a coleção de assuntos dos compromissos
   void _getSubjectCollection() {
     _subjectCollection.add('Sistemas de Informação');
     _subjectCollection.add('Gestão e Planeamento de Redes');
@@ -105,6 +66,7 @@ class CalendarAppointment extends State<TimeTableCalendar> {
     _subjectCollection.add('Computação em Nuvem');
   }
 
+  // Inicializa a coleção de horários de início dos compromissos
   void _getStartTimeCollection() {
     var currentDateTime = DateTime.now();
 
@@ -120,6 +82,7 @@ class CalendarAppointment extends State<TimeTableCalendar> {
         currentDateTime.month, currentDateTime.day, 21, 30, 0));
   }
 
+  // Inicializa a coleção de horários de término dos compromissos
   void _getEndTimeCollection() {
     var currentDateTime = DateTime.now();
 
@@ -135,6 +98,7 @@ class CalendarAppointment extends State<TimeTableCalendar> {
         currentDateTime.day, 23, 30, 0));
   }
 
+  // Inicializa a coleção de cores dos compromissos
   void _getColorCollection() {
     _colorCollection.add(const Color(0xFFFC571D));
     _colorCollection.add(const Color(0xFF36B37B));
@@ -149,6 +113,7 @@ class CalendarAppointment extends State<TimeTableCalendar> {
   }
 }
 
+// Classe que define a fonte de dados do calendário
 class _DataSource extends CalendarDataSource {
   _DataSource(List<Appointment> source) {
     appointments = source;
