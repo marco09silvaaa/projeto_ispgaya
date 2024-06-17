@@ -1,123 +1,156 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Importar o pacote intl para formatação de datas
+import 'package:flutter/scheduler.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(const TimeTableCalendar());
 
-class MyApp extends StatelessWidget {
+class TimeTableCalendar extends StatefulWidget {
+  const TimeTableCalendar({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
-        length: 7,
-        child: MeetingsPage(),
-      ),
-    );
-  }
+  CalendarAppointment createState() => CalendarAppointment();
 }
 
-class MeetingsPage extends StatefulWidget {
-  @override
-  _MeetingsPageState createState() => _MeetingsPageState();
-}
-
-class _MeetingsPageState extends State<MeetingsPage>
-    with SingleTickerProviderStateMixin {
-  final List<Map<String, String>> meetings = [
-    {
-      "time": "13:00 - 14:40",
-      "location": "Blue str, 21",
-      "title": "Project Planning"
-    },
-    {
-      "time": "13:00 - 14:40",
-      "location": "Blue str, 21",
-      "title": "Project Planning"
-    },
-    {
-      "time": "13:00 - 14:40",
-      "location": "Blue str, 21",
-      "title": "Project Planning"
-    },
-  ];
-
-  List<String> daysOfWeek = [];
-
-  late TabController _tabController;
-  late String currentDay;
-  late String currentMonth;
+class CalendarAppointment extends State<TimeTableCalendar> {
+  final CalendarDataSource _dataSource = _DataSource(<Appointment>[]);
+  final List<String> _subjectCollection = <String>[];
+  final List<DateTime> _startTimeCollection = <DateTime>[];
+  final List<DateTime> _endTimeCollection = <DateTime>[];
+  final List<Color> _colorCollection = <Color>[];
+  List<TimeRegion> _specialTimeRegion = <TimeRegion>[];
 
   @override
   void initState() {
+    _getSubjectCollection();
+    _getStartTimeCollection();
+    _getEndTimeCollection();
+    _getColorCollection();
     super.initState();
-    _tabController = TabController(length: 7, vsync: this);
-    // Definir o índice inicial com base no dia da semana atual
-    int currentIndex = DateTime.now().weekday - 1;
-    _tabController.animateTo(currentIndex);
-
-    // Preencher a lista daysOfWeek com os dias formatados
-    DateTime now = DateTime.now();
-    for (int i = 0; i < 7; i++) {
-      String formattedDate =
-          DateFormat('dd EEE').format(now.add(Duration(days: i)));
-      daysOfWeek.add(formattedDate);
-    }
-
-    // Obter o dia da semana atual
-    currentDay = DateFormat('dd').format(DateTime.now());
-
-    // Obter o mês atual
-    currentMonth = DateFormat('MMMM').format(DateTime.now());
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "$currentDay $currentMonth",
-              style: TextStyle(fontSize: 24),
-            ),
-          ],
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: SafeArea(
+          child: SfCalendar(
+            dataSource: _dataSource,
+            view: CalendarView.week,
+            allowedViews: const [
+              CalendarView.day,
+              CalendarView.week,
+              CalendarView.month,
+              CalendarView.schedule
+            ],
+            onViewChanged: viewChanged,
+            specialRegions: _specialTimeRegion,
+          ),
         ),
-        backgroundColor: Colors.purple,
-        bottom: TabBar(
-          isScrollable: true,
-          tabs: daysOfWeek.map((day) => Tab(text: day)).toList(),
-          controller: _tabController,
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: List.generate(7, (index) {
-          return ListView.builder(
-            itemCount: meetings.length,
-            itemBuilder: (context, idx) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  child: ListTile(
-                    title: Text(meetings[idx]['title']!),
-                    subtitle: Text(
-                        "${meetings[idx]['time']} \n${meetings[idx]['location']}"),
-                    isThreeLine: true,
-                  ),
-                ),
-              );
-            },
-          );
-        }),
       ),
     );
+  }
+
+  void viewChanged(ViewChangedDetails viewChangedDetails) {
+    List<DateTime> visibleDates = viewChangedDetails.visibleDates;
+    List<TimeRegion> timeRegion = <TimeRegion>[];
+    List<Appointment> appointments = <Appointment>[];
+    _dataSource.appointments!.clear();
+
+    for (int i = 0; i < visibleDates.length; i++) {
+      if (visibleDates[i].weekday == 6 || visibleDates[i].weekday == 7) {
+        continue;
+      }
+
+      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+        setState(() {
+          _specialTimeRegion = timeRegion;
+        });
+      });
+      for (int j = 0; j < _startTimeCollection.length; j++) {
+        DateTime startTime = DateTime(
+            visibleDates[i].year,
+            visibleDates[i].month,
+            visibleDates[i].day,
+            _startTimeCollection[j].hour,
+            _startTimeCollection[j].minute,
+            _startTimeCollection[j].second);
+        DateTime endTime = DateTime(
+            visibleDates[i].year,
+            visibleDates[i].month,
+            visibleDates[i].day,
+            _endTimeCollection[j].hour,
+            _endTimeCollection[j].minute,
+            _endTimeCollection[j].second);
+        Random random = Random();
+        appointments.add(Appointment(
+            startTime: startTime,
+            endTime: endTime,
+            subject: _subjectCollection[random.nextInt(3)],
+            color: _colorCollection[random.nextInt(3)]));
+      }
+    }
+    for (int i = 0; i < appointments.length; i++) {
+      _dataSource.appointments!.add(appointments[i]);
+    }
+    _dataSource.notifyListeners(
+        CalendarDataSourceAction.reset, _dataSource.appointments!);
+  }
+
+  void _getSubjectCollection() {
+    _subjectCollection.add('Sistemas de Informação');
+    _subjectCollection.add('Gestão e Planeamento de Redes');
+    _subjectCollection.add('Projeto');
+    _subjectCollection.add('Computação em Nuvem');
+  }
+
+  void _getStartTimeCollection() {
+    var currentDateTime = DateTime.now();
+
+    _startTimeCollection.add(DateTime(currentDateTime.year,
+        currentDateTime.month, currentDateTime.day, 14, 30, 0));
+    _startTimeCollection.add(DateTime(currentDateTime.year,
+        currentDateTime.month, currentDateTime.day, 16, 0, 0));
+    _startTimeCollection.add(DateTime(currentDateTime.year,
+        currentDateTime.month, currentDateTime.day, 18, 00, 0));
+    _startTimeCollection.add(DateTime(currentDateTime.year,
+        currentDateTime.month, currentDateTime.day, 19, 30, 0));
+    _startTimeCollection.add(DateTime(currentDateTime.year,
+        currentDateTime.month, currentDateTime.day, 21, 30, 0));
+  }
+
+  void _getEndTimeCollection() {
+    var currentDateTime = DateTime.now();
+
+    _endTimeCollection.add(DateTime(currentDateTime.year, currentDateTime.month,
+        currentDateTime.day, 16, 0, 0));
+    _endTimeCollection.add(DateTime(currentDateTime.year, currentDateTime.month,
+        currentDateTime.day, 17, 30, 0));
+    _endTimeCollection.add(DateTime(currentDateTime.year, currentDateTime.month,
+        currentDateTime.day, 19, 30, 0));
+    _endTimeCollection.add(DateTime(currentDateTime.year, currentDateTime.month,
+        currentDateTime.day, 21, 0, 0));
+    _endTimeCollection.add(DateTime(currentDateTime.year, currentDateTime.month,
+        currentDateTime.day, 23, 30, 0));
+  }
+
+  void _getColorCollection() {
+    _colorCollection.add(const Color(0xFFFC571D));
+    _colorCollection.add(const Color(0xFF36B37B));
+    _colorCollection.add(const Color(0xFF01A1EF));
+    _colorCollection.add(const Color(0xFF3D4FB5));
+    _colorCollection.add(const Color(0xFFE47C73));
+    _colorCollection.add(const Color(0xFF636363));
+    _colorCollection.add(const Color(0xFF0A8043));
+    _colorCollection.add(const Color(0xFF0F8644));
+    _colorCollection.add(const Color(0xFF8B1FA9));
+    _colorCollection.add(const Color(0xFFD20100));
+  }
+}
+
+class _DataSource extends CalendarDataSource {
+  _DataSource(List<Appointment> source) {
+    appointments = source;
   }
 }
