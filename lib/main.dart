@@ -1,13 +1,42 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'screens/schedule.dart';
-import 'models/navbar.dart';
+import 'screens/login.dart';
+import 'screens/register.dart';
 
-void main() => runApp(const TimeTableCalendar());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-class TimeTableCalendar extends StatefulWidget {
-  const TimeTableCalendar({super.key});
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyDebZkJf-mldUAh_qxpfCMtUn7i-HRVJ3k",
+            authDomain: "ispgaya-app.firebaseapp.com",
+            projectId: "ispgaya-app",
+            storageBucket: "ispgaya-app.appspot.com",
+            messagingSenderId: "944688189811",
+            appId: "1:944688189811:web:6fa085b567a9f9d8ce7506",
+            measurementId: "G-5J004ST51B"));
+  } else {
+    await Firebase.initializeApp();
+  }
 
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
   @override
-  CalendarAppointment createState() => CalendarAppointment();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Login & Register',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: LoginPage(),
+      routes: {
+        '/login': (context) => LoginPage(),
+        '/register': (context) => RegisterPage(),
+      },
+    );
+  }
 }

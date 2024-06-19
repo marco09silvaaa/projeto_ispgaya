@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import '../main.dart';
 import '../models/navbar.dart';
+
+class TimeTableCalendar extends StatefulWidget {
+  const TimeTableCalendar({super.key});
+
+  @override
+  CalendarAppointment createState() => CalendarAppointment();
+}
 
 class CalendarAppointment extends State<TimeTableCalendar> {
   final CalendarDataSource _dataSource = _DataSource(<Appointment>[]);
