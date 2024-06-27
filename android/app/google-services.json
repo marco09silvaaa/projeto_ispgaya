@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "135210812450",
+    "project_id": "ispgayaapp",
+    "storage_bucket": "ispgayaapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:135210812450:android:6659c97dead35f357fb67b",
+        "android_client_info": {
+          "package_name": "com.example.projeto_ispgaya"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHAbVBNn_nCJZr6ryQyRNVeId5dOAWqT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
