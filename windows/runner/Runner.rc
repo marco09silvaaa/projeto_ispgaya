@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "ispgaya_app" "\0"
+            VALUE "FileDescription", "projeto_ispgaya" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "ispgaya_app" "\0"
+            VALUE "InternalName", "projeto_ispgaya" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "ispgaya_app.exe" "\0"
-            VALUE "ProductName", "ispgaya_app" "\0"
+            VALUE "OriginalFilename", "projeto_ispgaya.exe" "\0"
+            VALUE "ProductName", "projeto_ispgaya" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

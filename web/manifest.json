@@ -1,6 +1,6 @@
 {
-    "name": "ispgaya_app",
-    "short_name": "ispgaya_app",
+    "name": "projeto_ispgaya",
+    "short_name": "projeto_ispgaya",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

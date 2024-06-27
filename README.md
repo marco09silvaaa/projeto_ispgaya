@@ -1,4 +1,4 @@
-# ispgaya_app
+# projeto_ispgaya
 
 A new Flutter project.
 
