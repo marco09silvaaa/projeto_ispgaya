@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_ispgaya/Screens/home_page.dart';
 import 'package:projeto_ispgaya/screens/login_page.dart';
 import 'package:projeto_ispgaya/firebase_options.dart';
+import 'package:projeto_ispgaya/screens/schedule_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,12 +17,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ISPGAYA',
+      title: 'Minha App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
+      initialRoute: '/login', // Rota inicial
+      routes: {
+        '/login': (context) => LoginPage(),
+        '/home': (context) => HomePage(),
+        '/schedule': (context) => TimeTableCalendar(),
+      },
     );
   }
 }
