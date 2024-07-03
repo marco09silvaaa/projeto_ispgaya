@@ -2,6 +2,9 @@ import 'package:projeto_ispgaya/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// utilizador: ispg2018100326@ispgaya.pt
+// password: 2018100326
+
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
@@ -41,26 +44,13 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Center(
-                child: Text(
-                  'Bem-vindo',
-                  style: GoogleFonts.raleway(
-                      textStyle: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32)),
-                ),
-              ),
-              const SizedBox(
-                height: 20, // Ajuste o espaçamento conforme necessário
-              ),
-              Center(
                 child: Image.asset(
                   'images/logo_ispgaya.png',
-                  height: 100, // Ajuste o tamanho conforme necessário
+                  height: 100,
                 ),
               ),
               const SizedBox(
-                height: 60, // Ajuste o espaçamento conforme necessário
+                height: 60,
               ),
               _emailAddress(),
               const SizedBox(
@@ -158,7 +148,16 @@ class LoginPage extends StatelessWidget {
             password: _passwordController.text,
             context: context);
       },
-      child: const Text("Login"),
+      child: Text(
+        "Login",
+        style: GoogleFonts.raleway(
+          textStyle: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.normal,
+            fontSize: 16,
+          ),
+        ),
+      ),
     );
   }
 }
