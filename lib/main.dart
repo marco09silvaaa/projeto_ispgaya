@@ -1,9 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_ispgaya/Screens/home_page.dart';
-import 'package:projeto_ispgaya/screens/login_page.dart';
 import 'package:projeto_ispgaya/firebase_options.dart';
-import 'package:projeto_ispgaya/screens/schedule_page.dart';
+import 'package:projeto_ispgaya/screens/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,16 +15,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Minha App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute: '/login', // Rota inicial
-      routes: {
-        '/login': (context) => LoginPage(),
-        '/home': (context) => HomePage(),
-        '/schedule': (context) => TimeTableCalendar(),
-      },
+      title: 'ISPGAYA',
+      home: LoginPage(),
     );
   }
 }

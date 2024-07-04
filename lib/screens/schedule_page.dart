@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_ispgaya/navbar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+
+// Imports de outros ficheiros
+import 'package:projeto_ispgaya/others/navbar.dart';
 
 class TimeTableCalendar extends StatefulWidget {
   const TimeTableCalendar({super.key});
@@ -31,8 +33,7 @@ class CalendarAppointment extends State<TimeTableCalendar> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        bottomNavigationBar:
-            const NavBar(), // Adiciona a NavBar na parte inferior da tela
+        bottomNavigationBar: const NavBar(),
         body: SafeArea(
           child: SfCalendar(
             dataSource: _dataSource,
