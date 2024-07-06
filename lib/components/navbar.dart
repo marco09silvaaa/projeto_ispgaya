@@ -12,6 +12,7 @@ class CustomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 70,
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 255, 160, 0),
         boxShadow: [
@@ -23,34 +24,34 @@ class CustomNavBar extends StatelessWidget {
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
           child: GNav(
-            gap: 8,
+            gap: 12,
             activeColor: Colors.white,
-            iconSize: 24,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            iconSize: 28,
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
             duration: const Duration(milliseconds: 600),
-            tabBackgroundColor: const Color.fromARGB(255, 70, 70, 70),
+            tabBackgroundColor: const Color.fromARGB(255, 122, 78, 0),
             tabs: const [
               GButton(
-                icon: Icons.home,
+                icon: LineIcons.home,
                 text: 'Início',
-                textStyle: TextStyle(color: Colors.white),
+                textStyle: TextStyle(color: Colors.white, fontSize: 16),
               ),
               GButton(
-                icon: Icons.calendar_today,
+                icon: LineIcons.calendar,
                 text: 'Horário',
-                textStyle: TextStyle(color: Colors.white),
+                textStyle: TextStyle(color: Colors.white, fontSize: 16),
               ),
               GButton(
-                icon: Icons.local_bar,
+                icon: LineIcons.coffee,
                 text: 'Bar',
-                textStyle: TextStyle(color: Colors.white),
+                textStyle: TextStyle(color: Colors.white, fontSize: 16),
               ),
               GButton(
-                icon: Icons.person,
+                icon: LineIcons.user,
                 text: 'Utilizador',
-                textStyle: TextStyle(color: Colors.white),
+                textStyle: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ],
             selectedIndex: currentIndex,

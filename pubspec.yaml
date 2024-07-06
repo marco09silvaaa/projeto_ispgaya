@@ -47,6 +47,7 @@ dependencies:
   syncfusion_flutter_calendar: ^26.1.40+1
   get: ^4.6.6
   line_icons: ^2.0.3
+  cloud_firestore: ^5.0.2
 
 dev_dependencies:
   flutter_test:

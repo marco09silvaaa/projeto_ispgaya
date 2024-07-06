@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_ispgaya/services/database_service.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:projeto_ispgaya/components/navbar.dart';
 
 class SchedulePage extends StatefulWidget {
@@ -10,20 +12,14 @@ class SchedulePage extends StatefulWidget {
 }
 
 class CalendarAppointment extends State<SchedulePage> {
+  final DatabaseService databaseService = DatabaseService();
+
   final CalendarDataSource _dataSource = _DataSource(<Appointment>[]);
-  final List<String> _subjectCollection = <String>[];
-  final List<DateTime> _startTimeCollection = <DateTime>[];
-  final List<DateTime> _endTimeCollection = <DateTime>[];
-  final List<Color> _colorCollection = <Color>[];
-  final List<TimeRegion> _specialTimeRegion = <TimeRegion>[];
 
   @override
   void initState() {
-    _getSubjectCollection();
-    _getStartTimeCollection();
-    _getEndTimeCollection();
-    _getColorCollection();
     super.initState();
+    _fetchAppointmentsFromFirebase();
   }
 
   @override
@@ -32,16 +28,28 @@ class CalendarAppointment extends State<SchedulePage> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SafeArea(
-          child: SfCalendar(
-            dataSource: _dataSource,
-            view: CalendarView.week,
-            allowedViews: const [
-              CalendarView.day,
-              CalendarView.week,
-              CalendarView.month,
-              CalendarView.schedule
+          child: Column(
+            children: [
+              Expanded(
+                child: SfCalendar(
+                  dataSource: _dataSource,
+                  view: CalendarView.week,
+                  allowedViews: const [
+                    CalendarView.day,
+                    CalendarView.week,
+                    CalendarView.month,
+                    CalendarView.schedule
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: _addNewEvent,
+                  child: const Text('Adicionar Evento'),
+                ),
+              ),
             ],
-            specialRegions: _specialTimeRegion,
           ),
         ),
         bottomNavigationBar: CustomNavBar(
@@ -67,52 +75,52 @@ class CalendarAppointment extends State<SchedulePage> {
     );
   }
 
-  void _getSubjectCollection() {
-    _subjectCollection.add('Sistemas de Informação');
-    _subjectCollection.add('Gestão e Planeamento de Redes');
-    _subjectCollection.add('Projeto');
-    _subjectCollection.add('Computação em Nuvem');
+  void _addNewEvent() {
+    final DateTime startTime = DateTime.now().add(const Duration(hours: 1));
+    final DateTime endTime = startTime.add(const Duration(hours: 1));
+    final Appointment newAppointment = Appointment(
+      startTime: startTime,
+      endTime: endTime,
+      subject: 'Novo Evento',
+      color: Colors.blue,
+    );
+
+    setState(() {
+      (_dataSource.appointments as List<Appointment>).add(newAppointment);
+      _dataSource.notifyListeners(
+          CalendarDataSourceAction.add, <Appointment>[newAppointment]);
+    });
   }
 
-  void _getStartTimeCollection() {
-    var currentDateTime = DateTime.now();
-    _startTimeCollection.add(DateTime(currentDateTime.year,
-        currentDateTime.month, currentDateTime.day, 14, 30, 0));
-    _startTimeCollection.add(DateTime(currentDateTime.year,
-        currentDateTime.month, currentDateTime.day, 16, 0, 0));
-    _startTimeCollection.add(DateTime(currentDateTime.year,
-        currentDateTime.month, currentDateTime.day, 18, 00, 0));
-    _startTimeCollection.add(DateTime(currentDateTime.year,
-        currentDateTime.month, currentDateTime.day, 19, 30, 0));
-    _startTimeCollection.add(DateTime(currentDateTime.year,
-        currentDateTime.month, currentDateTime.day, 21, 30, 0));
-  }
+  void _fetchAppointmentsFromFirebase() async {
+    CollectionReference events =
+        FirebaseFirestore.instance.collection('events');
 
-  void _getEndTimeCollection() {
-    var currentDateTime = DateTime.now();
-    _endTimeCollection.add(DateTime(currentDateTime.year, currentDateTime.month,
-        currentDateTime.day, 16, 0, 0));
-    _endTimeCollection.add(DateTime(currentDateTime.year, currentDateTime.month,
-        currentDateTime.day, 17, 30, 0));
-    _endTimeCollection.add(DateTime(currentDateTime.year, currentDateTime.month,
-        currentDateTime.day, 19, 30, 0));
-    _endTimeCollection.add(DateTime(currentDateTime.year, currentDateTime.month,
-        currentDateTime.day, 21, 0, 0));
-    _endTimeCollection.add(DateTime(currentDateTime.year, currentDateTime.month,
-        currentDateTime.day, 23, 30, 0));
-  }
+    QuerySnapshot snapshot = await events.get();
+    List<Appointment> appointments = [];
 
-  void _getColorCollection() {
-    _colorCollection.add(const Color(0xFFFC571D));
-    _colorCollection.add(const Color(0xFF36B37B));
-    _colorCollection.add(const Color(0xFF01A1EF));
-    _colorCollection.add(const Color(0xFF3D4FB5));
-    _colorCollection.add(const Color(0xFFE47C73));
-    _colorCollection.add(const Color(0xFF636363));
-    _colorCollection.add(const Color(0xFF0A8043));
-    _colorCollection.add(const Color(0xFF0F8644));
-    _colorCollection.add(const Color(0xFF8B1FA9));
-    _colorCollection.add(const Color(0xFFD20100));
+    for (var doc in snapshot.docs) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+      DateTime startTime = (data['startTime'] as Timestamp).toDate();
+      DateTime endTime = (data['endTime'] as Timestamp).toDate();
+      String subject = data['subject'];
+      Color color = Color(int.parse(data['color']));
+
+      appointments.add(
+        Appointment(
+          startTime: startTime,
+          endTime: endTime,
+          subject: subject,
+          color: color,
+        ),
+      );
+    }
+
+    setState(() {
+      _dataSource.appointments!.addAll(appointments);
+      _dataSource.notifyListeners(CalendarDataSourceAction.reset, appointments);
+    });
   }
 }
 
