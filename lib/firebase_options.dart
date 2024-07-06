@@ -42,17 +42,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyD5NbOhhD1NBDXrgdinIpUME30Nyp66AUg',
-    appId: '1:135210812450:web:75df190f1e90de4e7fb67b',
+    appId: '1:135210812450:web:7f9584be4be865a37fb67b',
     messagingSenderId: '135210812450',
     projectId: 'ispgayaapp',
     authDomain: 'ispgayaapp.firebaseapp.com',
     storageBucket: 'ispgayaapp.appspot.com',
-    measurementId: 'G-J41B8DDG17',
+    measurementId: 'G-4W5H51W9BZ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBHAbVBNn_nCJZr6ryQyRNVeId5dOAWqT8',
-    appId: '1:135210812450:android:6659c97dead35f357fb67b',
+    appId: '1:135210812450:android:5a19e229f92697277fb67b',
     messagingSenderId: '135210812450',
     projectId: 'ispgayaapp',
     storageBucket: 'ispgayaapp.appspot.com',
@@ -60,7 +60,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDOuQ0kaX53jIJowSQYbZjvdZUgfMpbY7g',
-    appId: '1:135210812450:ios:e8a01d53ab1e11507fb67b',
+    appId: '1:135210812450:ios:e63d7e394c720ee57fb67b',
     messagingSenderId: '135210812450',
     projectId: 'ispgayaapp',
     storageBucket: 'ispgayaapp.appspot.com',
@@ -69,7 +69,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDOuQ0kaX53jIJowSQYbZjvdZUgfMpbY7g',
-    appId: '1:135210812450:ios:e8a01d53ab1e11507fb67b',
+    appId: '1:135210812450:ios:e63d7e394c720ee57fb67b',
     messagingSenderId: '135210812450',
     projectId: 'ispgayaapp',
     storageBucket: 'ispgayaapp.appspot.com',
@@ -78,11 +78,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyD5NbOhhD1NBDXrgdinIpUME30Nyp66AUg',
-    appId: '1:135210812450:web:fb2df5ac5e03cc967fb67b',
+    appId: '1:135210812450:web:6c1c3a89ce1b67e17fb67b',
     messagingSenderId: '135210812450',
     projectId: 'ispgayaapp',
     authDomain: 'ispgayaapp.firebaseapp.com',
     storageBucket: 'ispgayaapp.appspot.com',
-    measurementId: 'G-ZKYPHRL2BM',
+    measurementId: 'G-WL5YZ3QJS4',
   );
+
 }

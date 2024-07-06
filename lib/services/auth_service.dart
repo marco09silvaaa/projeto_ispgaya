@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:projeto_ispgaya/Screens/home_page.dart';
-import 'package:projeto_ispgaya/Screens/login_page.dart';
+import 'package:projeto_ispgaya/pages/home_page.dart';
+import 'package:projeto_ispgaya/pages/login_page.dart';
 
 class AuthService {
   Future<void> signup(
@@ -15,10 +15,7 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password);
 
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => const HomePage()));
+      Navigator.pushReplacementNamed(context, '/');
     } on FirebaseAuthException catch (e) {
       String message = '';
       if (e.code == 'weak-password') {
@@ -46,10 +43,7 @@ class AuthService {
           .signInWithEmailAndPassword(email: email, password: password);
 
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => const HomePage()));
+      Navigator.pushReplacementNamed(context, '/');
     } on FirebaseAuthException catch (e) {
       String message = '';
       if (e.code == 'invalid-email') {

@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:projeto_ispgaya/components/navbar.dart';
 
-// Imports de outros ficheiros
-import 'package:projeto_ispgaya/others/navbar.dart';
-
-class TimeTableCalendar extends StatefulWidget {
-  const TimeTableCalendar({super.key});
+class SchedulePage extends StatefulWidget {
+  const SchedulePage({super.key});
 
   @override
   CalendarAppointment createState() => CalendarAppointment();
 }
 
-class CalendarAppointment extends State<TimeTableCalendar> {
+class CalendarAppointment extends State<SchedulePage> {
   final CalendarDataSource _dataSource = _DataSource(<Appointment>[]);
   final List<String> _subjectCollection = <String>[];
   final List<DateTime> _startTimeCollection = <DateTime>[];
@@ -33,7 +31,6 @@ class CalendarAppointment extends State<TimeTableCalendar> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        bottomNavigationBar: const NavBar(),
         body: SafeArea(
           child: SfCalendar(
             dataSource: _dataSource,
@@ -46,6 +43,25 @@ class CalendarAppointment extends State<TimeTableCalendar> {
             ],
             specialRegions: _specialTimeRegion,
           ),
+        ),
+        bottomNavigationBar: CustomNavBar(
+          currentIndex: 1,
+          onTap: (index) {
+            switch (index) {
+              case 0:
+                Navigator.pushReplacementNamed(context, '/');
+                break;
+              case 1:
+                Navigator.pushReplacementNamed(context, '/schedule');
+                break;
+              case 2:
+                Navigator.pushReplacementNamed(context, '/bar');
+                break;
+              case 3:
+                Navigator.pushReplacementNamed(context, '/user');
+                break;
+            }
+          },
         ),
       ),
     );
