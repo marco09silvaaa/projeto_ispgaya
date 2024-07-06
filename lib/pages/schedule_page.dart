@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_ispgaya/services/database_service.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:projeto_ispgaya/components/navbar.dart';
@@ -12,8 +11,6 @@ class SchedulePage extends StatefulWidget {
 }
 
 class CalendarAppointment extends State<SchedulePage> {
-  final DatabaseService databaseService = DatabaseService();
-
   final CalendarDataSource _dataSource = _DataSource(<Appointment>[]);
 
   @override
