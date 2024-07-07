@@ -72,6 +72,7 @@ class CalendarAppointment extends State<SchedulePage> {
       DateTime startTime = (data['startTime'] as Timestamp).toDate();
       DateTime endTime = (data['endTime'] as Timestamp).toDate();
       String subject = data['subject'];
+      String room = data['room'] ?? '';
       Color color = Color(int.parse(data['color']));
 
       appointments.add(
@@ -80,6 +81,7 @@ class CalendarAppointment extends State<SchedulePage> {
           endTime: endTime,
           subject: subject,
           color: color,
+          notes: room,
         ),
       );
     }
