@@ -25,27 +25,14 @@ class CalendarAppointment extends State<SchedulePage> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: SfCalendar(
-                  dataSource: _dataSource,
-                  view: CalendarView.week,
-                  allowedViews: const [
-                    CalendarView.day,
-                    CalendarView.week,
-                    CalendarView.month,
-                    CalendarView.schedule
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: _addNewEvent,
-                  child: const Text('Adicionar Evento'),
-                ),
-              ),
+          child: SfCalendar(
+            dataSource: _dataSource,
+            view: CalendarView.week,
+            allowedViews: const [
+              CalendarView.day,
+              CalendarView.week,
+              CalendarView.month,
+              CalendarView.schedule
             ],
           ),
         ),
@@ -70,23 +57,6 @@ class CalendarAppointment extends State<SchedulePage> {
         ),
       ),
     );
-  }
-
-  void _addNewEvent() {
-    final DateTime startTime = DateTime.now().add(const Duration(hours: 1));
-    final DateTime endTime = startTime.add(const Duration(hours: 1));
-    final Appointment newAppointment = Appointment(
-      startTime: startTime,
-      endTime: endTime,
-      subject: 'Novo Evento',
-      color: Colors.blue,
-    );
-
-    setState(() {
-      (_dataSource.appointments as List<Appointment>).add(newAppointment);
-      _dataSource.notifyListeners(
-          CalendarDataSourceAction.add, <Appointment>[newAppointment]);
-    });
   }
 
   void _fetchAppointmentsFromFirebase() async {

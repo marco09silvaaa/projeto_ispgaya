@@ -1,21 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
-  // get collection of notes
+  // Obter a coleção de notas
   final CollectionReference notes =
       FirebaseFirestore.instance.collection('notes');
 
-  // CREATE
+  // CREATE - Adicionar uma nova nota
   Future<void> addNote(String note) {
     return notes.add({
-      'notes': note,
+      'note': note, // Corrigi 'notes' para 'note'
       'timestamp': Timestamp.now(),
     });
   }
 
-  // READ https://www.youtube.com/watch?v=iQOvD0y-xnw&t=194s
+  // READ - Obter o stream de notas ordenadas por timestamp
+  Stream<QuerySnapshot> getNotesStream() {
+    // Corrigi 'getNodesStream' para 'getNotesStream'
+    final notesStream =
+        notes.orderBy('timestamp', descending: true).snapshots();
+    return notesStream;
+  }
 
-  // UPDATE
+  // UPDATE - Método futuro para atualização de notas
+  Future<void> updateNote(String docId, String newNote) {
+    return notes.doc(docId).update({
+      'note': newNote,
+      'timestamp': Timestamp.now(),
+    });
+  }
 
-  // DELETE
+  // DELETE - Método futuro para exclusão de notas
+  Future<void> deleteNote(String docId) {
+    return notes.doc(docId).delete();
+  }
 }
