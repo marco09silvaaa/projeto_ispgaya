@@ -8,11 +8,11 @@ class BarPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bar Page'),
+        title: const Text('Bar'),
       ),
       body: const Center(
         child: Text(
-          'Conteúdo da Bar Page',
+          'Futura expansão da aplicação',
           style: TextStyle(fontSize: 24.0),
         ),
       ),

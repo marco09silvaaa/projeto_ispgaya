@@ -34,6 +34,46 @@ class CalendarAppointment extends State<SchedulePage> {
               CalendarView.month,
               CalendarView.schedule
             ],
+            appointmentBuilder: (context, details) {
+              final Appointment appointment = details.appointments.first;
+              return Container(
+                decoration: BoxDecoration(
+                  color: appointment.color,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                padding: const EdgeInsets.all(8),
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        appointment.subject,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                    if (appointment.notes != null &&
+                        appointment.notes!.isNotEmpty)
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Text(
+                          appointment.notes!,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
         bottomNavigationBar: CustomNavBar(
